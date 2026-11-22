@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Sweep.App</RootNamespace>
+    <AssemblyName>Sweep.App</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sweep.Core\Sweep.Core.csproj" />
+    <ProjectReference Include="..\Sweep.Ai.Abstractions\Sweep.Ai.Abstractions.csproj" />
+    <!-- 编译期仅建立构建顺序；运行期通过反射加载，DLL 允许缺失（架构红线 3.2） -->
+    <ProjectReference Include="..\Sweep.Ai.Providers\Sweep.Ai.Providers.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\Sweep.Helper\Sweep.Helper.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\rules\builtin-win.json" Link="rules\builtin-win.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+  <!-- 可缺省插件：构建后复制到输出目录，用户删除该 DLL 后主程序仍可启动 -->
+  <Target Name="CopyOptionalAiProvider" AfterTargets="Build">
+    <ItemGroup>
+      <_ProviderDll Include="$(MSBuildThisFileDirectory)..\Sweep.Ai.Providers\bin\$(Configuration)\net10.0\Sweep.Ai.Providers.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_ProviderDll)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
+  <!-- 内置规则包签名：每次构建按实际内容生成 SHA256，避免规则改动后签名失效 -->
+  <Target Name="WriteRulePackSignature" AfterTargets="Build">
+    <GetFileHash Files="$(MSBuildThisFileDirectory)..\..\rules\builtin-win.json" Algorithm="SHA256" HashEncoding="hex">
+      <Output TaskParameter="Hash" PropertyName="_RulePackHash" />
+    </GetFileHash>
+    <WriteLinesToFile File="$(IntermediateOutputPath)rules-hash.txt" Lines="$(_RulePackHash)" Overwrite="true" />
+    <Copy SourceFiles="$(IntermediateOutputPath)rules-hash.txt" DestinationFiles="$(TargetDir)rules\builtin-win.json.sha256" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="CopyElevationHelper" AfterTargets="Build">
+    <ItemGroup>
+      <!-- RID 发布会把 Helper 输出到 win-x64 子目录；通配符只匹配实际存在的文件，Debug 与安装包都能拿到提权辅助程序 -->
+      <_HelperOut Include="$(MSBuildThisFileDirectory)..\Sweep.Helper\bin\$(Configuration)\net10.0-windows\Sweep.Helper.*" />
+      <_HelperOut Include="$(MSBuildThisFileDirectory)..\Sweep.Helper\bin\$(Configuration)\net10.0-windows\win-x64\Sweep.Helper.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_HelperOut)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" ContinueOnError="true" Condition="'@(_HelperOut)' != ''" />
+  </Target>
+</Project>

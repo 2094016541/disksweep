@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>Sweep.Helper</RootNamespace>
+    <AssemblyName>Sweep.Helper</AssemblyName>
+    <ApplicationManifest>helper.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sweep.Core\Sweep.Core.csproj" />
+  </ItemGroup>
+</Project>

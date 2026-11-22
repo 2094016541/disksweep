@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Sweep.Ai.Abstractions/Sweep.Ai.Abstractions.csproj" />
+    <Project Path="src/Sweep.Ai.Providers/Sweep.Ai.Providers.csproj" />
+    <Project Path="src/Sweep.App/Sweep.App.csproj" />
+    <Project Path="src/Sweep.Core/Sweep.Core.csproj" />
+    <Project Path="src/Sweep.Helper/Sweep.Helper.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Sweep.Tests/Sweep.Tests.csproj" />
+    <Project Path="tests/Sweep.ViewModelTests/Sweep.ViewModelTests.csproj" />
+  </Folder>
+</Solution>

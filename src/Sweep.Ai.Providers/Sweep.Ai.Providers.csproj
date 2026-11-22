@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Sweep.Ai.Providers</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sweep.Ai.Abstractions\Sweep.Ai.Abstractions.csproj" />
+    <EmbeddedResource Include="providers.json" />
+  </ItemGroup>
+</Project>

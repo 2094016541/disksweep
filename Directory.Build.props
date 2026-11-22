@@ -4,8 +4,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Version>1.0.0</Version>
-    <Product>DiskSweep</Product>
-    <Company>DiskSweep</Company>
+    <Product>Sweep</Product>
+    <Company>Sweep</Company>
     <NoWarn>$(NoWarn);CA1416;SYSLIB1054;NU1701</NoWarn>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <EnableNETAnalyzers>false</EnableNETAnalyzers>
