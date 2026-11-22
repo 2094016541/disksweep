@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>DiskSweep.Setup</RootNamespace>
+    <AssemblyName>DiskSweep.Setup</AssemblyName>
+    <ApplicationManifest>setup.manifest</ApplicationManifest>
+    <PayloadZip Condition="'$(PayloadZip)' == ''">$(MSBuildThisFileDirectory)Payload\payload.zip</PayloadZip>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- 由 build-installer.ps1 生成 payload.zip 后通过 -p:PayloadZip 传入；缺文件时仍可编译，运行时给出明确错误 -->
+    <EmbeddedResource Include="$(PayloadZip)" LogicalName="DiskSweep.Setup.payload.zip" Condition="Exists('$(PayloadZip)')" />
+  </ItemGroup>
+</Project>

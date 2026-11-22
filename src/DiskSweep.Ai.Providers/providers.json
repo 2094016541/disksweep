@@ -1,0 +1,9 @@
+{
+  "providers": [
+    { "id": "deepseek", "label": "DeepSeek", "kind": "openai-compatible", "baseUrl": "https://api.deepseek.com/v1", "defaultModel": "deepseek-chat", "jsonMode": "response_format", "builtin": true, "pricePer1MInputTokens": 0.28, "pricePer1MOutputTokens": 0.42 },
+    { "id": "openai", "label": "OpenAI", "kind": "openai-compatible", "baseUrl": "https://api.openai.com/v1", "defaultModel": "gpt-4o-mini", "jsonMode": "response_format", "builtin": true, "pricePer1MInputTokens": 0.15, "pricePer1MOutputTokens": 0.60 },
+    { "id": "anthropic", "label": "Anthropic Claude", "kind": "anthropic", "baseUrl": "https://api.anthropic.com", "defaultModel": "claude-sonnet-4", "jsonMode": "tool-call", "builtin": true, "pricePer1MInputTokens": 3.0, "pricePer1MOutputTokens": 15.0 },
+    { "id": "ollama", "label": "本地模型 (Ollama)", "kind": "ollama", "baseUrl": "http://localhost:11434", "defaultModel": "qwen2.5:7b", "jsonMode": "format", "builtin": true, "pricePer1MInputTokens": 0, "pricePer1MOutputTokens": 0 },
+    { "id": "custom-01", "label": "自定义 OpenAI 兼容端点", "kind": "openai-compatible", "baseUrl": "http://localhost:8000/v1", "defaultModel": "any", "jsonMode": "response_format", "builtin": false, "pricePer1MInputTokens": 0, "pricePer1MOutputTokens": 0 }
+  ]
+}

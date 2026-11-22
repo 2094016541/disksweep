@@ -1,0 +1,321 @@
+﻿<Window x:Class="DiskSweep.App.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DiskSweep 设置" Width="940" Height="720" MinWidth="820" MinHeight="600"
+        Background="{DynamicResource BgBrush}" TextOptions.TextFormattingMode="Display"
+        UseLayoutRounding="True" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Grid Margin="24,20,24,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="设置" Style="{StaticResource TitleText}"/>
+            <TextBlock Style="{StaticResource MutedText}" Margin="0,6,0,0"
+                       Text="安全相关的默认值不可协商；其余项改动后立即生效并写入 %LOCALAPPDATA%\DiskSweep\settings.json。"/>
+        </StackPanel>
+
+        <TabControl Grid.Row="1" Style="{StaticResource SideTabControl}"
+                    SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
+
+            <!-- 常规 -->
+            <TabItem Style="{StaticResource SideTabItem}" AutomationProperties.Name="常规">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Width="15" Height="15" Stretch="Uniform" Margin="0,0,10,0"
+                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"
+                              StrokeThickness="1.5" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                              Data="M 1,4 H 14 M 1,10.5 H 14"/>
+                        <TextBlock Text="常规" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,0,4,0">
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="不可协商的默认行为" Style="{StaticResource SectionText}"/>
+                                <TextBlock Style="{StaticResource MutedText}" Margin="0,8,0,0"
+                                           Text="删除模式恒为回收站。永久删除只是单次操作级开关，需要勾选并输入确认词，绝不写回设置。"/>
+                                <TextBlock Style="{StaticResource MutedText}" Margin="0,6,0,0"
+                                           Text="默认不勾选高风险项；AI 建议永不进入定时静默清理；提权助手不解析规则、不联网、不常驻。"/>
+                                <Border Style="{StaticResource FlatCard}" Margin="0,12,0,0" Padding="12,10">
+                                    <TextBlock Style="{StaticResource CaptionText}" Text="{Binding RulePackText}"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="外观与体验" Style="{StaticResource SectionText}"/>
+                                <Grid Margin="0,14,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="132"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="界面主题" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" Width="200" SelectedIndex="{Binding ThemeIndex, Mode=TwoWay}"
+                                              ToolTip="选择即预览，保存后持久化；主界面右上角也可一键轮换">
+                                        <ComboBoxItem Content="跟随系统（自动切换）"/>
+                                        <ComboBoxItem Content="浅色"/>
+                                        <ComboBoxItem Content="深色"/>
+                                    </ComboBox>
+                                    <TextBlock Grid.Column="2" Style="{StaticResource CaptionText}" Margin="14,0,0,0"
+                                               VerticalAlignment="Center"
+                                               Text="选择即预览，取消会自动回滚"/>
+                                </Grid>
+                                <Grid Margin="0,12,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="132"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="大文件阈值 (MB)" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Width="120"
+                                             Text="{Binding LargeThresholdMb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="隐私" Style="{StaticResource SectionText}"/>
+                                <CheckBox Content="启用匿名遥测（默认关闭；只上报分类数与体积区间，绝不含路径）"
+                                          Margin="0,12,0,0" IsChecked="{Binding TelemetryEnabled, Mode=TwoWay}"/>
+                                <CheckBox Content="启用托盘常驻（默认关闭；退出时清理图标）"
+                                          Margin="0,10,0,0" IsChecked="{Binding TrayEnabled, Mode=TwoWay}"/>
+                                <TextBlock Style="{StaticResource CaptionText}" Margin="0,14,0,0"
+                                           Text="语言 zh-CN · PerMonitorV2 高 DPI · 设置与数据库位于 %LOCALAPPDATA%\DiskSweep\，密钥单独用 DPAPI 加密保存。"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- 白名单 -->
+            <TabItem Style="{StaticResource SideTabItem}" AutomationProperties.Name="白名单">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Width="14" Height="16" Stretch="Uniform" Margin="0,0,10,0"
+                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"
+                              StrokeThickness="1.4" StrokeLineJoin="Round" StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round"
+                              Data="M 8,1.2 L 14.2,3.6 V 7.8 L 8,14.8 L 1.8,7.8 V 3.6 Z"/>
+                        <TextBlock Text="白名单" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Border Style="{StaticResource Card}" VerticalAlignment="Top">
+                        <StackPanel Margin="0,0,2,0">
+                            <TextBlock Text="白名单（每行一个模式）" Style="{StaticResource SectionText}"/>
+                            <TextBlock Style="{StaticResource MutedText}" Margin="0,8,0,10"
+                                       Text="语法：** 递归、* 单层、%VAR% 环境变量、结尾 \ 表示目录。命中即否决，优先级高于任何规则与 AI 结论。"/>
+                            <TextBox AcceptsReturn="True" Height="190" VerticalContentAlignment="Top"
+                                     TextWrapping="NoWrap" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     FontFamily="Consolas, Cascadia Mono, Microsoft YaHei UI"
+                                     Text="{Binding WhitelistText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <TextBlock Text="排除扩展名（逗号分隔）" Style="{StaticResource SectionText}" Margin="0,18,0,8"/>
+                            <TextBox Text="{Binding ExtensionsText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                                <Button Content="校验语法" Style="{StaticResource SecondaryButton}"
+                                        Command="{Binding ValidateWhitelistCommand}" Margin="0,0,12,0"/>
+                                <TextBlock Margin="0,0,0,0" VerticalAlignment="Center" FontSize="12"
+                                           Text="{Binding ValidationText}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource MutedText}">
+                                            <Setter Property="Foreground" Value="{DynamicResource DangerBrush}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ValidationOk}" Value="True">
+                                                    <Setter Property="Foreground" Value="{DynamicResource LowBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- AI -->
+            <TabItem Style="{StaticResource SideTabItem}" AutomationProperties.Name="AI（可选）">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0"
+                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"
+                              StrokeThickness="1.4" StrokeLineJoin="Round" StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round"
+                              Data="M 8,1.6 L 9.9,5.8 L 14.4,6.6 L 11.2,9.8 L 12,14.4 L 8,12.2 L 4,14.4 L 4.8,9.8 L 1.6,6.6 L 6.1,5.8 Z"/>
+                        <TextBlock Text="AI（可选）" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,0,4,0">
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="AI 是纯可选增强层" Style="{StaticResource SectionText}"/>
+                                <TextBlock Style="{StaticResource MutedText}" Margin="0,8,0,10" Text="{Binding AiStatusText}"/>
+                                <CheckBox Content="启用 AI 建议（未启用时 AI 面板整体不出现，核心功能完整）"
+                                          IsChecked="{Binding AiEnabled, Mode=TwoWay}"/>
+
+                                <TextBlock Text="首次开启前必须完成明确同意" Style="{StaticResource SectionText}" Margin="0,18,0,8"/>
+                                <Border Style="{StaticResource FlatCard}" Padding="12,10">
+                                    <TextBlock Style="{StaticResource MutedText}" FontSize="11.5"
+                                               Text="开启后，DiskSweep 只把你所选厂商需要的「脱敏摘要」发送出去：目录名模板化（&lt;DIR:xxxx&gt;）、文件名抹除只留扩展名、体积与修改时间按桶分桶，不含完整路径、盘符与用户名。数据由你选择的厂商按其条款处理，本产品不代为承诺。脱敏不等于匿名。你可以在任意时刻关闭开关并清除缓存（删除数据库 ai_cache 表）。自定义端点可能是企业内网，请自行确认其合规性。"/>
+                                </Border>
+                                <CheckBox Content="我已阅读并同意上述数据发送告知（版本 v1）" Margin="0,12,0,0"
+                                          IsChecked="{Binding ConsentAccepted, Mode=TwoWay}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="服务商（同时只启用一个）" Style="{StaticResource SectionText}"/>
+                                <!-- 用 ItemTemplate 而非 DisplayMemberPath：自绘 ComboBox 的选中项渲染不走
+                                     DisplayMemberPath 的成员解析，会退化成对象 ToString()。 -->
+                                <ComboBox Margin="0,12,0,0"
+                                          ItemsSource="{Binding Providers}"
+                                          SelectedItem="{Binding SelectedProvider, Mode=TwoWay}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Label}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+
+                                <Grid Margin="0,12,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="96"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="接口地址" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding BaseUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="96"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="110"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="模型" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding Model, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Grid.Column="2" Text="月预算（美元）" VerticalAlignment="Center" Margin="16,0,10,0"/>
+                                    <TextBox Grid.Column="3" Text="{Binding BudgetText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="96"/>
+                                        <ColumnDefinition Width="260"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="接口密钥" VerticalAlignment="Center"/>
+                                    <PasswordBox Grid.Column="1" x:Name="TxtApiKey"/>
+                                    <TextBlock Grid.Column="2" Style="{StaticResource MutedText}" VerticalAlignment="Center"
+                                               Margin="12,0,0,0" Text="{Binding ApiKeyMask}"/>
+                                </Grid>
+
+                                <CheckBox Content="隐私模式（默认开启）：只发送模板化摘要，不发送相对路径"
+                                          Margin="0,14,0,0" IsChecked="{Binding PrivacyMode, Mode=TwoWay}"/>
+                                <TextBlock Style="{StaticResource CaptionText}" Margin="0,10,0,0" Text="{Binding UsageText}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="自然语言 → 规则语法" Style="{StaticResource SectionText}"/>
+                                <TextBlock Style="{StaticResource MutedText}" Margin="0,6,0,10"
+                                           Text="只做翻译与预览，不会直接执行；写入用户规则包后仍需你手动勾选才会生效。"/>
+                                <TextBox Text="{Binding NaturalText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                    <Button Content="翻译并预览" Style="{StaticResource SecondaryButton}"
+                                            Command="{Binding TranslateCommand}" Margin="0,0,10,0"/>
+                                    <Button Content="写入用户规则包" Style="{StaticResource SecondaryButton}"
+                                            Command="{Binding WriteRuleCommand}" Margin="0"/>
+                                </StackPanel>
+                                <TextBlock Style="{StaticResource MutedText}" Margin="0,10,0,0" Text="{Binding DslText}"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- 计划任务 -->
+            <TabItem Style="{StaticResource SideTabItem}" AutomationProperties.Name="计划任务">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Width="15" Height="16" Stretch="Uniform" Margin="0,0,10,0"
+                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"
+                              StrokeThickness="1.4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                              Data="M 8,1.4 A 6.6,6.6 0 1 0 8,14.6 A 6.6,6.6 0 1 0 8,1.4 Z M 8,4.6 V 8.4 L 10.8,10.2"/>
+                        <TextBlock Text="计划任务" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Border Style="{StaticResource Card}" VerticalAlignment="Top">
+                        <StackPanel Margin="0,0,2,0">
+                            <TextBlock Text="定时静默清理" Style="{StaticResource SectionText}"/>
+                            <TextBlock Style="{StaticResource MutedText}" Margin="0,8,0,10" Text="{Binding ScheduleDescription}"/>
+                            <CheckBox Content="启用计划任务（默认关闭；不写 Run 键、不安装服务、不开机自启）"
+                                      IsChecked="{Binding ScheduleEnabled, Mode=TwoWay}"/>
+
+                            <Grid Margin="0,16,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="132"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="结构化触发器" VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" Width="240"
+                                         Text="{Binding Trigger, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Grid.Column="2" Style="{StaticResource CaptionText}" Margin="12,0,0,0"
+                                           VerticalAlignment="Center"
+                                           Text="每周一 03:00：weekly:Mon@03:00；每天 03:00：daily@03:00；空闲时：idle"/>
+                            </Grid>
+                            <Grid Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="132"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="剩余空间低于 (%)" VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" Width="90"
+                                         Text="{Binding MinFreePercentText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Grid.Column="2" Style="{StaticResource CaptionText}" Margin="12,0,0,0"
+                                           VerticalAlignment="Center"
+                                           Text="只有剩余空间低于该比例才真正清理"/>
+                            </Grid>
+
+                            <Border Style="{StaticResource FlatCard}" Margin="0,16,0,0" Padding="12,10">
+                                <TextBlock Style="{StaticResource MutedText}" FontSize="11.5"
+                                           Text="任务以当前用户最低权限注册（TASK_RUNLEVEL_LUA），绝不使用 SYSTEM。静默清单只接受 Source=Rule 且 Risk=Low 的条目；AI 建议、Review 项与需管理员项一律跳过，绝不自动弹 UAC。"/>
+                            </Border>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                                <Button Content="注册 / 更新" Style="{StaticResource SecondaryButton}"
+                                        Command="{Binding RegisterScheduleCommand}" Margin="0,0,10,0"/>
+                                <Button Content="移除计划任务" Style="{StaticResource SecondaryButton}"
+                                        Command="{Binding UnregisterScheduleCommand}" Margin="0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <DockPanel Grid.Row="2" Margin="0,16,0,0" LastChildFill="False">
+            <TextBlock Style="{StaticResource CaptionText}" VerticalAlignment="Center"
+                       Text="关闭窗口不会丢失已保存的设置；取消会回滚本次未保存的改动。"/>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                <Button Content="取消" Style="{StaticResource SecondaryButton}" Command="{Binding CancelCommand}"
+                        MinWidth="104" Margin="0,0,10,0"/>
+                <Button Content="保存并关闭" Command="{Binding SaveCommand}" MinWidth="136" Margin="0"/>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

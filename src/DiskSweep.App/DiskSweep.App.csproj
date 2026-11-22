@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>DiskSweep.App</RootNamespace>
+    <AssemblyName>DiskSweep.App</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DiskSweep.Core\DiskSweep.Core.csproj" />
+    <ProjectReference Include="..\DiskSweep.Ai.Abstractions\DiskSweep.Ai.Abstractions.csproj" />
+    <!-- 编译期仅建立构建顺序；运行期通过反射加载，DLL 允许缺失（架构红线 3.2） -->
+    <ProjectReference Include="..\DiskSweep.Ai.Providers\DiskSweep.Ai.Providers.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\DiskSweep.Helper\DiskSweep.Helper.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\rules\builtin-win.json" Link="rules\builtin-win.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+  <!-- 可缺省插件：构建后复制到输出目录，用户删除该 DLL 后主程序仍可启动 -->
+  <Target Name="CopyOptionalAiProvider" AfterTargets="Build">
+    <ItemGroup>
+      <_ProviderDll Include="$(MSBuildThisFileDirectory)..\DiskSweep.Ai.Providers\bin\$(Configuration)\net10.0\DiskSweep.Ai.Providers.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_ProviderDll)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
+  <!-- 内置规则包签名：每次构建按实际内容生成 SHA256，避免规则改动后签名失效 -->
+  <Target Name="WriteRulePackSignature" AfterTargets="Build">
+    <GetFileHash Files="$(MSBuildThisFileDirectory)..\..\rules\builtin-win.json" Algorithm="SHA256" HashEncoding="hex">
+      <Output TaskParameter="Hash" PropertyName="_RulePackHash" />
+    </GetFileHash>
+    <WriteLinesToFile File="$(IntermediateOutputPath)rules-hash.txt" Lines="$(_RulePackHash)" Overwrite="true" />
+    <Copy SourceFiles="$(IntermediateOutputPath)rules-hash.txt" DestinationFiles="$(TargetDir)rules\builtin-win.json.sha256" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="CopyElevationHelper" AfterTargets="Build">
+    <ItemGroup>
+      <_HelperOut Include="$(MSBuildThisFileDirectory)..\DiskSweep.Helper\bin\$(Configuration)\net10.0-windows\DiskSweep.Helper.exe" />
+      <_HelperOut Include="$(MSBuildThisFileDirectory)..\DiskSweep.Helper\bin\$(Configuration)\net10.0-windows\DiskSweep.Helper.dll" />
+      <_HelperOut Include="$(MSBuildThisFileDirectory)..\DiskSweep.Helper\bin\$(Configuration)\net10.0-windows\DiskSweep.Helper.deps.json" />
+      <_HelperOut Include="$(MSBuildThisFileDirectory)..\DiskSweep.Helper\bin\$(Configuration)\net10.0-windows\DiskSweep.Helper.runtimeconfig.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_HelperOut)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
+</Project>

@@ -1,0 +1,585 @@
+{
+  "schemaVersion": 2,
+  "packId": "builtin-win",
+  "packVersion": "2026.11.2",
+  "rules": [
+    {
+      "id": "temp-user",
+      "category": "临时文件",
+      "paths": [
+        "%TEMP%\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 1,
+      "handling": "glob-delete",
+      "description": "当前用户的临时文件目录",
+      "reclaimNote": "程序异常退出时可能残留，删除后部分程序首次启动会重建"
+    },
+    {
+      "id": "temp-system",
+      "category": "临时文件",
+      "paths": [
+        "%WINDIR%\\Temp\\**"
+      ],
+      "risk": "medium",
+      "defaultSelected": false,
+      "requiresAdmin": true,
+      "minAgeDays": 7,
+      "handling": "glob-delete",
+      "description": "系统临时目录",
+      "reclaimNote": "部分安装程序正在使用时会失败，失败项自动跳过"
+    },
+    {
+      "id": "windows-update-cache",
+      "category": "系统与更新",
+      "paths": [
+        "%WINDIR%\\SoftwareDistribution\\Download\\**"
+      ],
+      "risk": "medium",
+      "defaultSelected": false,
+      "requiresAdmin": true,
+      "minAgeDays": 3,
+      "handling": "glob-delete",
+      "description": "Windows 更新下载缓存",
+      "reclaimNote": "删除后如需卸载更新会重新下载"
+    },
+    {
+      "id": "windows-prefetch",
+      "category": "系统与更新",
+      "paths": [
+        "%WINDIR%\\Prefetch\\**"
+      ],
+      "risk": "medium",
+      "defaultSelected": false,
+      "requiresAdmin": true,
+      "minAgeDays": 30,
+      "handling": "glob-delete",
+      "description": "预读取缓存",
+      "reclaimNote": "删除后短期内应用启动略慢，系统会自动重建"
+    },
+    {
+      "id": "wer-reports",
+      "category": "日志与报告",
+      "paths": [
+        "%LOCALAPPDATA%\\Microsoft\\Windows\\WER\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 7,
+      "handling": "glob-delete",
+      "description": "Windows 错误报告与队列",
+      "reclaimNote": "删除后历史崩溃报告不可查看"
+    },
+    {
+      "id": "crash-dumps",
+      "category": "日志与报告",
+      "paths": [
+        "%LOCALAPPDATA%\\CrashDumps\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 7,
+      "handling": "glob-delete",
+      "description": "应用崩溃转储文件",
+      "reclaimNote": "如正在排查崩溃请保留"
+    },
+    {
+      "id": "thumbnail-cache",
+      "category": "缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\Microsoft\\Windows\\Explorer\\thumbcache_*.db"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 3,
+      "handling": "glob-delete",
+      "description": "资源管理器缩略图缓存",
+      "reclaimNote": "被资源管理器占用时会失败，系统自动重建"
+    },
+    {
+      "id": "chrome-cache",
+      "category": "缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Cache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 2,
+      "handling": "glob-delete",
+      "description": "Chrome 浏览器缓存",
+      "reclaimNote": "不影响书签与登录状态，网页首次加载略慢"
+    },
+    {
+      "id": "edge-cache",
+      "category": "缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Cache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 2,
+      "handling": "glob-delete",
+      "description": "Edge 浏览器缓存",
+      "reclaimNote": "不影响收藏与登录状态"
+    },
+    {
+      "id": "chrome-code-cache",
+      "category": "缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Code Cache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 2,
+      "handling": "glob-delete",
+      "description": "Chrome 脚本与资源编译缓存",
+      "reclaimNote": "浏览器自动重建，不影响书签与登录状态"
+    },
+    {
+      "id": "edge-code-cache",
+      "category": "缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Code Cache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 2,
+      "handling": "glob-delete",
+      "description": "Edge 脚本与资源编译缓存",
+      "reclaimNote": "浏览器自动重建，不影响收藏与登录状态"
+    },
+    {
+      "id": "firefox-cache",
+      "category": "缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\Mozilla\\Firefox\\Profiles\\*\\cache2\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 3,
+      "handling": "glob-delete",
+      "description": "Firefox 浏览器缓存",
+      "reclaimNote": "不影响书签、登录与历史记录；仅命中 cache2 目录"
+    },
+    {
+      "id": "npm-cache",
+      "category": "缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\npm-cache\\**",
+        "%USERPROFILE%\\.npm\\_cacache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 7,
+      "handling": "glob-delete",
+      "description": "npm 包下载缓存",
+      "reclaimNote": "删除后首次安装依赖会重新下载，不影响已安装的项目依赖"
+    },
+    {
+      "id": "pip-cache",
+      "category": "缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\pip\\Cache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 7,
+      "handling": "glob-delete",
+      "description": "pip 包下载缓存",
+      "reclaimNote": "删除后首次安装 Python 包会重新下载，不影响已安装的虚拟环境"
+    },
+    {
+      "id": "inetcache",
+      "category": "缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\Microsoft\\Windows\\INetCache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 3,
+      "handling": "glob-delete",
+      "description": "系统与旧版浏览器的网络临时缓存",
+      "reclaimNote": "删除后网页/应用首次打开会略慢，缓存会自动重建"
+    },
+    {
+      "id": "teams-cache",
+      "category": "缓存",
+      "paths": [
+        "%APPDATA%\\Microsoft\\Teams\\Cache\\**",
+        "%APPDATA%\\Microsoft\\Teams\\Code Cache\\**",
+        "%APPDATA%\\Microsoft\\Teams\\GPUCache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 3,
+      "handling": "glob-delete",
+      "description": "Microsoft Teams 客户端缓存（不含聊天记录）",
+      "reclaimNote": "聊天记录与账号在其它目录，不受影响；仅首次启动会慢一点"
+    },
+    {
+      "id": "slack-cache",
+      "category": "缓存",
+      "paths": [
+        "%APPDATA%\\Slack\\Cache\\**",
+        "%APPDATA%\\Slack\\Code Cache\\**",
+        "%APPDATA%\\Slack\\GPUCache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 3,
+      "handling": "glob-delete",
+      "description": "Slack 客户端缓存（不含消息与登录态）",
+      "reclaimNote": "仅清理可重建的缓存，不影响会话与历史消息"
+    },
+    {
+      "id": "discord-cache",
+      "category": "缓存",
+      "paths": [
+        "%APPDATA%\\discord\\Cache\\**",
+        "%APPDATA%\\discord\\Code Cache\\**",
+        "%APPDATA%\\discord\\GPUCache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 3,
+      "handling": "glob-delete",
+      "description": "Discord 客户端缓存",
+      "reclaimNote": "仅清理可重建的缓存，不影响登录态"
+    },
+    {
+      "id": "vscode-cache",
+      "category": "缓存",
+      "paths": [
+        "%APPDATA%\\Code\\Cache\\**",
+        "%APPDATA%\\Code\\CachedData\\**",
+        "%APPDATA%\\Code\\GPUCache\\**"
+      ],
+      "risk": "low",
+      "defaultSelected": true,
+      "requiresAdmin": false,
+      "minAgeDays": 3,
+      "handling": "glob-delete",
+      "description": "VS Code 的语法着色与扩展宿主缓存",
+      "reclaimNote": "用户设置、扩展本体与工作区历史都不在此目录"
+    },
+    {
+      "id": "yarn-cache",
+      "category": "开发缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\Yarn\\Cache\\**",
+        "%LOCALAPPDATA%\\Yarn\\Berry\\cache\\**"
+      ],
+      "risk": "medium",
+      "defaultSelected": false,
+      "requiresAdmin": false,
+      "minAgeDays": 7,
+      "handling": "glob-delete",
+      "description": "Yarn 包缓存",
+      "reclaimNote": "删除后重新安装依赖需要联网重新下载"
+    },
+    {
+      "id": "pnpm-cache",
+      "category": "开发缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\pnpm-cache\\**"
+      ],
+      "risk": "medium",
+      "defaultSelected": false,
+      "requiresAdmin": false,
+      "minAgeDays": 7,
+      "handling": "glob-delete",
+      "description": "pnpm 包缓存",
+      "reclaimNote": "删除后重新安装依赖需要联网重新下载"
+    },
+    {
+      "id": "nuget-cache",
+      "category": "开发缓存",
+      "paths": [
+        "%LOCALAPPDATA%\\NuGet\\v3-cache\\**",
+        "%LOCALAPPDATA%\\NuGet\\plugins-cache\\**"
+      ],
+      "risk": "medium",
+      "defaultSelected": false,
+      "requiresAdmin": false,
+      "minAgeDays": 7,
+      "handling": "glob-delete",
+      "description": "NuGet 包缓存",
+      "reclaimNote": "删除后还原项目时需要重新下载包"
+    },
+    {
+      "id": "gradle-cache",
+      "category": "开发缓存",
+      "paths": [
+        "%USERPROFILE%\\.gradle\\caches\\**"
+      ],
+      "risk": "medium",
+      "defaultSelected": false,
+      "requiresAdmin": false,
+      "minAgeDays": 14,
+      "handling": "glob-delete",
+      "description": "Gradle 依赖与构建缓存",
+      "reclaimNote": "删除后首次构建明显变慢，需要重新下载依赖"
+    },
+    {
+      "id": "recyclebin-empty",
+      "category": "系统与更新",
+      "paths": [
+        "%SYSTEMDRIVE%\\"
+      ],
+      "risk": "high",
+      "defaultSelected": false,
+      "requiresAdmin": false,
+      "minAgeDays": 0,
+      "handling": "recyclebin-empty",
+      "description": "清空回收站",
+      "reclaimNote": "清空后无法从回收站还原；与 4.5 的配额预检联动"
+    },
+    {
+      "id": "winsxs-cleanup",
+      "category": "系统与更新",
+      "paths": [
+        "%WINDIR%\\WinSxS"
+      ],
+      "risk": "high",
+      "defaultSelected": false,
+      "requiresAdmin": true,
+      "minAgeDays": 0,
+      "handling": "dism-startcomponentcleanup",
+      "description": "组件存储清理（仅通过 DISM 执行，禁止直接删除目录）",
+      "reclaimNote": "执行后已安装的更新将无法卸载，不可回退"
+    },
+    {
+      "id": "windows-old",
+      "category": "系统与更新",
+      "paths": [
+        "%SYSTEMDRIVE%\\Windows.old"
+      ],
+      "risk": "high",
+      "defaultSelected": false,
+      "requiresAdmin": true,
+      "minAgeDays": 0,
+      "handling": "windows-old",
+      "description": "旧系统安装（仅走存储感知/DISM 接口）",
+      "reclaimNote": "删除后无法回退到上一版本 Windows"
+    },
+    {
+      "id": "hibernate-off",
+      "category": "系统与更新",
+      "paths": [
+        "%SYSTEMDRIVE%\\hiberfil.sys"
+      ],
+      "risk": "high",
+      "defaultSelected": false,
+      "requiresAdmin": true,
+      "minAgeDays": 0,
+      "handling": "powercfg-hibernate-off",
+      "description": "关闭休眠并删除休眠文件",
+      "reclaimNote": "将失去休眠与快速启动能力"
+    },
+    {
+      "id": "vss-shadows",
+      "category": "系统与更新",
+      "paths": [
+        "%SYSTEMDRIVE%\\System Volume Information"
+      ],
+      "risk": "high",
+      "defaultSelected": false,
+      "requiresAdmin": true,
+      "minAgeDays": 0,
+      "handling": "vss-delete-shadows",
+      "description": "删除旧的系统还原点（vssadmin）",
+      "reclaimNote": "删除后无法执行系统还原，建议先创建新还原点"
+    },
+    {
+      "id": "protect-dev-git",
+      "category": "保护规则",
+      "paths": [
+        "**\\.git\\**"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "Git 仓库，删除后项目不可用"
+    },
+    {
+      "id": "protect-node-modules",
+      "category": "保护规则",
+      "paths": [
+        "**\\node_modules\\**"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "依赖目录，体积大但可重建成本高"
+    },
+    {
+      "id": "protect-build-target",
+      "category": "保护规则",
+      "paths": [
+        "**\\target\\**"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "构建产物目录"
+    },
+    {
+      "id": "protect-venv",
+      "category": "保护规则",
+      "paths": [
+        "**\\.venv\\**",
+        "**\\venv\\**"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "Python 虚拟环境"
+    },
+    {
+      "id": "protect-vhdx",
+      "category": "保护规则",
+      "paths": [
+        "**\\*.vhdx",
+        "**\\*.vhd"
+      ],
+      "action": "review",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "WSL / Docker / Hyper-V 虚拟磁盘，单文件数十 GB"
+    },
+    {
+      "id": "protect-mail",
+      "category": "保护规则",
+      "paths": [
+        "**\\*.pst",
+        "**\\*.ost"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "Outlook 邮件数据，无备份不可重建"
+    },
+    {
+      "id": "protect-im-data",
+      "category": "保护规则",
+      "paths": [
+        "**\\Tencent\\WeChat\\**",
+        "**\\WeChat Files\\**",
+        "**\\Documents\\WeChat Files\\**",
+        "**\\QQ\\**",
+        "**\\WXWork\\**"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "微信 / QQ / 企业微信聊天数据"
+    },
+    {
+      "id": "protect-databases",
+      "category": "保护规则",
+      "paths": [
+        "**\\*.sqlite",
+        "**\\*.sqlite3",
+        "**\\*.mdb",
+        "**\\*.accdb"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "数据库文件，被占用且结构易损坏"
+    },
+    {
+      "id": "protect-game-pak",
+      "category": "保护规则",
+      "paths": [
+        "**\\*.pak",
+        "**\\Steam\\steamapps\\**",
+        "**\\Epic Games\\**"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "游戏库，重装成本极高"
+    },
+    {
+      "id": "protect-active-download",
+      "category": "保护规则",
+      "paths": [
+        "**\\*.crdownload",
+        "**\\*.part",
+        "**\\*.partial"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "下载中 / 正在写入的文件"
+    },
+    {
+      "id": "protect-onedrive",
+      "category": "保护规则",
+      "paths": [
+        "**\\OneDrive\\**",
+        "**\\OneDrive - *\\**"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "云占位文件：删除等于删云端文件，本地并不占空间"
+    },
+    {
+      "id": "protect-system-files",
+      "category": "保护规则",
+      "paths": [
+        "**\\pagefile.sys",
+        "**\\hiberfil.sys",
+        "**\\swapfile.sys"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 90,
+      "description": "系统页面/休眠文件，只由 powercfg 等系统接口处理"
+    },
+    {
+      "id": "protect-windows-old",
+      "category": "保护规则",
+      "paths": [
+        "**\\Windows.old\\**",
+        "**\\$WINDOWS.~BT\\**",
+        "**\\WinSxS\\**"
+      ],
+      "action": "keep",
+      "risk": "critical",
+      "defaultSelected": false,
+      "priority": 95,
+      "description": "禁止通用删除路径穿透系统组件与旧系统安装"
+    }
+  ]
+}

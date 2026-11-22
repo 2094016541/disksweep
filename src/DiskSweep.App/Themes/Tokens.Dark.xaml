@@ -1,0 +1,65 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 深色主题：近黑但不纯黑（#0C1015），避免与 OLED 纯黑边框产生割裂；
+         强调色分两档：AccentBrush 作填充（白字 4.9:1），AccentTextBrush 作暗底文字/描边（8:1）。
+         键集合必须与浅色字典完全一致（ThemeArchitectureTests 守护）。 -->
+    <FontFamily x:Key="UiFont">Segoe UI Variable Text, Segoe UI, Microsoft YaHei UI</FontFamily>
+    <FontFamily x:Key="DisplayFont">Segoe UI Variable Display, Segoe UI, Microsoft YaHei UI</FontFamily>
+
+    <SolidColorBrush x:Key="BgBrush" Color="#0C1015"/>
+    <SolidColorBrush x:Key="PanelBrush" Color="#12171E"/>
+    <SolidColorBrush x:Key="CardBrush" Color="#141A21"/>
+    <SolidColorBrush x:Key="RaisedBrush" Color="#232C38"/>
+    <SolidColorBrush x:Key="SubtleBrush" Color="#1A212A"/>
+    <SolidColorBrush x:Key="HoverBrush" Color="#212A35"/>
+    <SolidColorBrush x:Key="PressedBrush" Color="#2A3441"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#28323D"/>
+    <SolidColorBrush x:Key="BorderStrongBrush" Color="#6EA8FE"/>
+
+    <SolidColorBrush x:Key="TextBrush" Color="#E8EDF4"/>
+    <SolidColorBrush x:Key="MutedBrush" Color="#A3B0C0"/>
+    <SolidColorBrush x:Key="FaintBrush" Color="#8593A5"/>
+
+    <SolidColorBrush x:Key="AccentBrush" Color="#2D6BE0"/>
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="#1F5FD0"/>
+    <SolidColorBrush x:Key="AccentSoftBrush" Color="#16243A"/>
+    <SolidColorBrush x:Key="AccentTextBrush" Color="#6EA8FE"/>
+    <SolidColorBrush x:Key="OnAccentBrush" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="LowBrush" Color="#34D399"/>
+    <SolidColorBrush x:Key="LowSoftBrush" Color="#10281F"/>
+    <SolidColorBrush x:Key="LowTextBrush" Color="#6EE7B7"/>
+    <SolidColorBrush x:Key="MediumBrush" Color="#FBBF24"/>
+    <SolidColorBrush x:Key="MediumSoftBrush" Color="#2A2110"/>
+    <SolidColorBrush x:Key="MediumTextBrush" Color="#FCD34D"/>
+    <SolidColorBrush x:Key="HighBrush" Color="#FB923C"/>
+    <SolidColorBrush x:Key="HighSoftBrush" Color="#2C1B10"/>
+    <SolidColorBrush x:Key="HighTextBrush" Color="#FDBA74"/>
+    <SolidColorBrush x:Key="CriticalBrush" Color="#FB7185"/>
+    <SolidColorBrush x:Key="CriticalSoftBrush" Color="#2C131A"/>
+    <SolidColorBrush x:Key="CriticalTextBrush" Color="#FDA4AF"/>
+    <SolidColorBrush x:Key="DangerBrush" Color="#F87171"/>
+    <SolidColorBrush x:Key="DangerSoftBrush" Color="#2B1416"/>
+    <SolidColorBrush x:Key="DangerTextBrush" Color="#FCA5A5"/>
+    <SolidColorBrush x:Key="OnRiskBrush" Color="#0C1015"/>
+
+    <SolidColorBrush x:Key="OverlayBrush" Color="#99000000"/>
+    <SolidColorBrush x:Key="HoverOverlayBrush" Color="#14FFFFFF"/>
+    <SolidColorBrush x:Key="ScrollThumbBrush" Color="#39434F"/>
+    <SolidColorBrush x:Key="ScrollThumbHoverBrush" Color="#4C5967"/>
+    <SolidColorBrush x:Key="RingTrackBrush" Color="#232C37"/>
+
+    <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#141A21"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#141A21"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#E8EDF4"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#E8EDF4"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2D6BE0"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#212A35"/>
+
+    <DropShadowEffect x:Key="CardShadow" Color="#000000" Opacity="0.55"
+                      BlurRadius="18" ShadowDepth="4" Direction="270"/>
+    <DropShadowEffect x:Key="PopupShadow" Color="#000000" Opacity="0.65"
+                      BlurRadius="24" ShadowDepth="8" Direction="270"/>
+</ResourceDictionary>

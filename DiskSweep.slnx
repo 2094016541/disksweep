@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DiskSweep.Ai.Abstractions/DiskSweep.Ai.Abstractions.csproj" />
+    <Project Path="src/DiskSweep.Ai.Providers/DiskSweep.Ai.Providers.csproj" />
+    <Project Path="src/DiskSweep.App/DiskSweep.App.csproj" />
+    <Project Path="src/DiskSweep.Core/DiskSweep.Core.csproj" />
+    <Project Path="src/DiskSweep.Helper/DiskSweep.Helper.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DiskSweep.Tests/DiskSweep.Tests.csproj" />
+    <Project Path="tests/DiskSweep.ViewModelTests/DiskSweep.ViewModelTests.csproj" />
+  </Folder>
+</Solution>
